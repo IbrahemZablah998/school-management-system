@@ -65,7 +65,7 @@ const Users = () => {
         accessor: "uid",
       },
       {
-        Header: "Users Role",
+        Header: "User Role",
         accessor: "Editing",
         Cell: (cellObj) => (
           <Select
