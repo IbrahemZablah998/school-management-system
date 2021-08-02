@@ -1,5 +1,8 @@
 @import "../../../styles/styles.scss";
 
+.loaderContainer {
+  @include loader-container;
+}
 .sectionConatainer {
   @include section($maxHeight: 50%);
   overflow: auto;
@@ -12,7 +15,7 @@
     .teachers {
       display: flex;
       align-items: center;
-      width:100%;
+      width: 100%;
 
       .labelName {
         display: inline-block;

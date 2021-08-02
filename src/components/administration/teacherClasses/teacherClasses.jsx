@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadingActions } from "../../../store/loading";
 import Firebase from "../../../database/config";
 import Table from "../../common/Tables/table";
 import BackgroundLogo from "../../common/backgroundLogo/backgroundLogo";
 import Footer from "../../common/footer/footer";
+import Loader from "../../common/loader/loader";
 import classes from "./teacherClasses.module.scss";
 
 const TeacherClasses = () => {
@@ -10,8 +13,11 @@ const TeacherClasses = () => {
   const [teacherNameHandler, setTeacherNameHandler] = useState();
   const [viewSheet, setViewSheet] = useState(false);
   const [teacherClasses, setTeacherClasses] = useState([]);
+  const dispatch = useDispatch();
+  const isLoadingAdmin = useSelector((state) => state.loader.isLoadingAdmin);
 
   useEffect(() => {
+    dispatch(loadingActions.setIsLoadingAdmin(true));
     const db = Firebase.firestore();
     const teacherLectures = [];
     return db.collection("teachers").onSnapshot((snapshot) => {
@@ -26,10 +32,12 @@ const TeacherClasses = () => {
         }
       });
       setTeacherClasses(teacherLectures);
+      dispatch(loadingActions.setIsLoadingAdmin(false));
     });
-  }, [teacherNameHandler, teachers]);
+  }, [teacherNameHandler, teachers, dispatch]);
 
   useEffect(() => {
+    dispatch(loadingActions.setIsLoadingAdmin(true));
     const db = Firebase.firestore();
     return db.collection("teachersInfo").onSnapshot((snapshot) => {
       const postData = [];
@@ -37,8 +45,9 @@ const TeacherClasses = () => {
         postData.push({ ...doc.data() });
       });
       setTeachers(postData);
+      dispatch(loadingActions.setIsLoadingAdmin(false));
     });
-  }, []);
+  }, [dispatch]);
 
   const columns = React.useMemo(
     () => [
@@ -73,6 +82,11 @@ const TeacherClasses = () => {
 
   return (
     <>
+      {isLoadingAdmin && (
+        <div className={classes.loaderContainer}>
+          <Loader type="loader" />
+        </div>
+      )}
       {teacherNameHandler ? (
         <BackgroundLogo
           title={
