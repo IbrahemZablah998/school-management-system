@@ -8,9 +8,9 @@ import classes from "./teacherClasses.module.scss";
 const TeacherClasses = () => {
   const [teachers, setTeachers] = useState([]);
   const [teacherNameHandler, setTeacherNameHandler] = useState();
-  const [viewSheet, setViewSheet] = useState();
+  const [viewSheet, setViewSheet] = useState(false);
   const [teacherClasses, setTeacherClasses] = useState([]);
-  
+
   useEffect(() => {
     const db = Firebase.firestore();
     const teacherLectures = [];
@@ -27,7 +27,7 @@ const TeacherClasses = () => {
       });
       setTeacherClasses(teacherLectures);
     });
-  }, [teacherNameHandler,teachers]);
+  }, [teacherNameHandler, teachers]);
 
   useEffect(() => {
     const db = Firebase.firestore();
@@ -66,14 +66,9 @@ const TeacherClasses = () => {
     []
   );
 
-  const onViewSheetHandler = (event) => {
-    event.preventDefault();
-    setViewSheet(!viewSheet);
-  };
-
   const onSelectTeacherNameHandler = (event) => {
     setTeacherNameHandler(event.target.value);
-    setViewSheet(!viewSheet);
+    setViewSheet(event.target.value ? true : false);
   };
 
   return (
@@ -96,36 +91,31 @@ const TeacherClasses = () => {
       ) : (
         <BackgroundLogo title={"Teacher Classes Time "} />
       )}
-      <section className={classes.seactionConatainer}>
-        <form onSubmit={onViewSheetHandler}>
-          <div className={classes.classesTime}>
-            <div className={classes.teachers}>
-              <div className={classes.labelName}>Teacher Name</div>
-              <select
-                required
-                className={classes.selectTeachersName}
-                onChange={onSelectTeacherNameHandler}
-              >
-                <option></option>
-                {teachers.map((user, index) => {
-                  return (
-                    <option value={user.userName} key={index}>
-                      {user.userName}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <button className={classes.viewClasses}>
-              {!viewSheet ? "View Classes " : "Hide Classes "}
-            </button>
+      <section className={classes.sectionConatainer}>
+        <div className={classes.classesTime}>
+          <div className={classes.teachers}>
+            <div className={classes.labelName}>Teacher Name</div>
+            <select
+              required
+              className={classes.selectTeachersName}
+              onChange={onSelectTeacherNameHandler}
+            >
+              <option></option>
+              {teachers.map((user, index) => {
+                return (
+                  <option value={user.userName} key={index}>
+                    {user.userName}
+                  </option>
+                );
+              })}
+            </select>
           </div>
-          {viewSheet && (
-            <div className={classes.headerClassesTime}>
-              <Table columns={columns} data={teacherClasses} />
-            </div>
-          )}
-        </form>
+        </div>
+        {viewSheet && (
+          <div className={classes.headerClassesTime}>
+            <Table columns={columns} data={teacherClasses} />
+          </div>
+        )}
       </section>
       <Footer />
     </>
