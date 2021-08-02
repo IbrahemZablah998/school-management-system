@@ -2,9 +2,42 @@
 @import "../../../styles/styles.scss";
 
 .loginFooter {
-     clear: both;
-     height: 35px;
-     text-align: right;
-     border-radius: 0 0 7px 7px;
-    @include modal-style($background:map-get($grey,base),)
+  clear: both;
+  height: 35px;
+  text-align: right;
+  border-radius: 0 0 7px 7px;
+  @include modal-style($background: map-get($grey, base));
+}
+
+//desktop
+@media screen and (min-width: 1025px) {
+  .loginFooter {
+    @include modal-style(
+      $background: map-get($grey, base),
+      $width: 60%,
+      $margin: 0 20%
+    );
   }
+}
+
+//tablet
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .loginFooter {
+    @include modal-style(
+      $background: map-get($grey, base),
+      $width: 80%,
+      $margin: 0 10%
+    );
+  }
+}
+
+//phone
+@media screen and (max-width: 767px) {
+  .loginFooter {
+    @include modal-style(
+      $background: map-get($grey, base),
+      $width: 96%,
+      $margin: 0 2%
+    );
+  }
+}

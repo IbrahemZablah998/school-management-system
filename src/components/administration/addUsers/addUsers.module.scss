@@ -12,7 +12,7 @@
     @include icon;
   }
 
-  .selectUsersRole {
+  .selectOptions {
     @include select;
   }
 
@@ -22,5 +22,26 @@
     .signupButton {
       @include button;
     }
+  }
+}
+
+//desktop
+@media screen and (min-width: 1025px) {
+  .tableSection {
+    @include section($width: 60%, $margin: 0 20%);
+  }
+}
+
+//tablet
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .tableSection {
+    @include section($width: 80%, $margin: 0 10%);
+  }
+}
+
+//phone
+@media screen and (max-width: 767px) {
+  .tableSection {
+    @include section($width: 96%, $margin: 0 2%);
   }
 }

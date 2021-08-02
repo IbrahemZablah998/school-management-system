@@ -10,17 +10,23 @@
 
 .header {
   @include header;
+  transition: 0.4s ease-out;
 
   .link {
     @include link;
 
     .logo {
+      display: block;
       position: relative;
       font-family: sans-serif;
       font-size: 32px;
       font-weight: 700;
       transition: 0.6s;
       text-decoration: none;
+    }
+
+    &:hover {
+      transform: scale(1.09);
     }
   }
 
@@ -29,8 +35,20 @@
 
     .navList {
       @include conatiner-list;
+      transition: opacity 0.4s ease-in-out,
+        transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       margin: 0 20px;
       font-size: 24px;
+
+      &:nth-of-type(2) {
+        transition-delay: 0.1s;
+      }
+      &:nth-of-type(3) {
+        transition-delay: 0.2s;
+      }
+      &:nth-of-type(4) {
+        transition-delay: 0.3s;
+      }
 
       .image {
         border-radius: 50%;
@@ -42,13 +60,67 @@
       }
     }
   }
+
+  .menuicon {
+    position: relative;
+    padding: 26px 10px;
+    cursor: pointer;
+    z-index: 1;
+    display: none;
+
+    .menuiconline {
+      display: block;
+      position: relative;
+      background: map-get($map: $grey, $key: dark);
+      height: 2px;
+      width: 20px;
+      border-radius: 4px;
+      transition: background 0.8s ease;
+
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        left: 0;
+        width: 100%;
+        border-radius: 4px;
+        background: map-get($map: $grey, $key: dark);
+        transition: background 0.8s ease;
+      }
+
+      &::before {
+        transform: translateY(-5px);
+      }
+      &::after {
+        transform: translateY(5px);
+      }
+    }
+  }
+
+  .menubtn {
+    position: absolute;
+    top: -100px;
+
+    &:focus ~ menuicon {
+      .menuiconline {
+        &::before {
+          transform: translateY(-7px);
+        }
+        &::after {
+          transform: translateY(7px);
+        }
+      }
+    }
+  }
 }
 
 .sticky {
-  @include header($background: map-get($white, dark));
+  @include header($background: map-get($white, dark), $top: 0);
+  transition: 0.4s ease-out;
 
   .stickyLink {
-    @include link($color1: $pink, $key1: base, $color2: $grey, $key2: lighter);
+    @include link($color1: $pink, $key1: base, $color2: $grey, $key2: darker);
 
     .logo {
       position: relative;
@@ -58,6 +130,9 @@
       transition: 0.6s;
       text-decoration: none;
     }
+    &:hover {
+      transform: scale(1.09);
+    }
   }
 
   .navContainerList {
@@ -65,8 +140,20 @@
 
     .navList {
       @include conatiner-list;
+      transition: opacity 0.4s ease-in-out,
+        transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       margin: 0 20px;
       font-size: 24px;
+
+      &:nth-of-type(2) {
+        transition-delay: 0.1s;
+      }
+      &:nth-of-type(3) {
+        transition-delay: 0.2s;
+      }
+      &:nth-of-type(4) {
+        transition-delay: 0.3s;
+      }
 
       .image {
         border-radius: 50%;
@@ -81,6 +168,58 @@
           $key2: lighter,
           $padding: 8px
         );
+      }
+    }
+  }
+  .menuicon {
+    position: relative;
+    padding: 26px 10px;
+    cursor: pointer;
+    z-index: 1;
+    display: none;
+
+    .menuiconline {
+      display: block;
+      position: relative;
+      background: map-get($map: $grey, $key: dark);
+      height: 2px;
+      width: 20px;
+      border-radius: 4px;
+      transition: background 0.8s ease;
+
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        left: 0;
+        width: 100%;
+        border-radius: 4px;
+        background: map-get($map: $grey, $key: dark);
+        transition: background 0.8s ease;
+      }
+
+      &::before {
+        transform: translateY(-5px);
+      }
+      &::after {
+        transform: translateY(5px);
+      }
+    }
+  }
+
+  .menubtn {
+    position: absolute;
+    top: -100px;
+
+    &:focus ~ menuicon {
+      .menuiconline {
+        &::before {
+          transform: translateY(-7px);
+        }
+        &::after {
+          transform: translateY(7px);
+        }
       }
     }
   }
@@ -105,13 +244,320 @@
     margin-left: -70px;
     background-color: map-get($white, dark);
     min-width: 250px;
-    box-shadow: 0px 8px 16px 0px map-get($black, lighter);
-    z-index: 1;
+    margin-left: -70px;
+    border-radius: 12%;
+    z-index: 999;
     text-align: center;
     background-color: map-get($map: $white, $key: lighter);
 
     &:hover {
       transform: scale(1);
     }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .userSettingsDropDown {
+    box-shadow: 0px 8px 16px 0px map-get($pink, lighter);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .header {
+    .image {
+      display: none;
+    }
+    .menuicon {
+      display: block;
+
+      .menuiconline {
+        animation: closedMid 0.8s backwards;
+        animation-direction: reverse;
+
+        &::before {
+          animation: closedTop 0.8s backwards;
+          animation-direction: reverse;
+        }
+
+        &::after {
+          animation: closedBtm 0.8s backwards;
+          animation-direction: reverse;
+        }
+      }
+    }
+
+    .navContainerList {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      opacity: 0;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 160px 0;
+      width: 50%;
+      height: 100vh;
+      font-size: 23px;
+      background: map-get($map: $white, $key: light);
+      transition: opacity 0.8s 0.5s, clip-path 1s 0.5s;
+      clip-path: circle(250px at top right);
+
+      .navList {
+        opacity: 0;
+        transform: translateX(100%);
+        width: 100%;
+        text-align: center;
+
+        .dropdown {
+          &:hover {
+            display: block;
+
+            & .userSettingsDropDown {
+              display: flex;
+            }
+          }
+          .userSettingsDropDown {
+            position: relative;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .menubtn:checked ~ .navContainerList {
+      opacity: 1;
+      clip-path: circle(100% at left);
+
+      .navList {
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 0.4s ease-in-out,
+          transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &:nth-of-type(1) {
+          transition-delay: 0.7s;
+        }
+
+        &:nth-of-type(2) {
+          transition-delay: 0.8s;
+        }
+
+        &:nth-of-type(3) {
+          transition-delay: 0.9s;
+        }
+
+        &:nth-of-type(4) {
+          transition-delay: 1s;
+        }
+      }
+    }
+
+    .menubtn:checked ~ .menuicon {
+      border-radius: 0%;
+      animation: pulse 1s;
+
+      .menuiconline {
+        background: map-get($map: $grey, $key: dark);
+        animation: openMid 0.8s forwards;
+
+        &::before {
+          background: map-get($map: $grey, $key: dark);
+          animation: openTop 0.8s forwards;
+        }
+
+        &::after {
+          background: map-get($map: $grey, $key: dark);
+          animation: openBtm 0.8s forwards;
+        }
+      }
+    }
+  }
+
+  .sticky {
+    .image {
+      display: none;
+    }
+    .menuicon {
+      display: block;
+
+      .menuiconline {
+        animation: closedMid 0.8s backwards;
+        animation-direction: reverse;
+
+        &::before {
+          animation: closedTop 0.8s backwards;
+          animation-direction: reverse;
+        }
+
+        &::after {
+          animation: closedBtm 0.8s backwards;
+          animation-direction: reverse;
+        }
+      }
+    }
+
+    .navContainerList {
+      position: absolute;
+      top: 0;
+      right: 0;
+      opacity: 0;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 160px 0;
+      width: 50%;
+      height: 100vh;
+      font-size: 23px;
+      background: map-get($map: $white, $key: light);
+      transition: opacity 0.8s 0.5s, clip-path 1s 0.5s;
+      clip-path: circle(250px at top right);
+
+      .navList {
+        opacity: 0;
+        transform: translateX(100%);
+        width: 100%;
+        text-align: center;
+
+        .dropdown {
+          &:hover {
+            display: block;
+
+            & .userSettingsDropDown {
+              display: flex;
+            }
+          }
+          .userSettingsDropDown {
+            position: relative;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .menubtn:checked ~ .navContainerList {
+      opacity: 1;
+      clip-path: circle(100% at left);
+
+      .navList {
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 0.4s ease-in-out,
+          transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &:nth-of-type(1) {
+          transition-delay: 0.7s;
+        }
+
+        &:nth-of-type(2) {
+          transition-delay: 0.8s;
+        }
+
+        &:nth-of-type(3) {
+          transition-delay: 0.9s;
+        }
+
+        &:nth-of-type(4) {
+          transition-delay: 1s;
+        }
+      }
+    }
+
+    .menubtn:checked ~ .menuicon {
+      border-radius: 0%;
+      animation: pulse 100s;
+
+      .menuiconline {
+        background: map-get($map: $white, $key: light);
+        animation: openMid 0.8s forwards;
+
+        &::before {
+          background: map-get($map: $white, $key: light);
+          animation: openTop 0.8s forwards;
+        }
+
+        &::after {
+          background: map-get($map: $white, $key: light);
+          animation: openBtm 0.8s forwards;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  from {
+    box-shadow: 0 map-get($map: $white, $key: light);
+    background: map-get($map: $white, $key: light);
+  }
+
+  to {
+    box-shadow: 0 map-get($map: $grey, $key: dark);
+    background: map-get($map: $grey, $key: dark);
+  }
+}
+
+@keyframes openTop {
+  0% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(-90deg);
+  }
+}
+
+@keyframes closedTop {
+  0% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(90deg);
+  }
+}
+
+@keyframes openMid {
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes closedMid {
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes openBtm {
+  0% {
+    transform: translateY(5px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(90deg);
+  }
+}
+
+@keyframes closedBtm {
+  0% {
+    transform: translateY(5px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(90deg);
   }
 }

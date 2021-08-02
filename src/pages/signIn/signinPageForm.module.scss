@@ -1,4 +1,3 @@
-@import "../../styles/palettes.scss";
 @import "../../styles/styles.scss";
 
 body {
@@ -6,7 +5,7 @@ body {
 
   .singInPageSection {
     @include section();
-    padding: 5px 40px 20px 40px;
+    @include section-padding;
 
     .instruction {
       @include instruction;
@@ -26,6 +25,27 @@ body {
 
     .forgetPassword {
       @include forward-link;
+    }
+  }
+
+  //desktop
+  @media screen and (min-width: 1025px) {
+    .singInPageSection {
+      @include section($width: 60%, $margin: 0 20%);
+    }
+  }
+
+  //tablet
+  @media screen and (max-width: 1024px) and (min-width: 768px) {
+    .singInPageSection {
+      @include section($width: 80%, $margin: 0 10%);
+    }
+  }
+
+  //phone
+  @media screen and (max-width: 767px) {
+    .singInPageSection {
+      @include section($width: 96%, $margin: 0 2%);
     }
   }
 }

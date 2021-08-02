@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Select from "react-select";
 import { MdPerson } from "react-icons/md";
 import { MdLock } from "react-icons/md";
+import Slide from "react-reveal/Slide";
 import { emailRegex } from "../../../consts/RegEx";
 import { loadingActions } from "../../../store/loading";
 import { toastActions } from "../../../store/notification";
@@ -21,10 +21,11 @@ const AddUsers = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [major, setMajor] = useState("");
-  const [usersRole, setUsersRole] = useState("");
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const userRole = useSelector((state) => state.auth.userRole);
+  const teachersMajor = useSelector((state) => state.auth.teachersMajor);
+  const [major, setMajor] = useState(teachersMajor.Math);
+  const [usersRoleOptions, setUsersRoleOptions] = useState(userRole.students);
 
   const errorCreateAccount = (error) => {
     dispatch(loadingActions.setIsLoading(false));
@@ -37,7 +38,29 @@ const AddUsers = () => {
     );
   };
 
-  const successCreateAccountInformation = () => {
+  const successCreateAccountInformation = (token) => {
+    if (usersRoleOptions === "Teachers") {
+      database
+        .collection("teachersInfo")
+        .doc(token)
+        .set({
+          uid: email,
+          userName: name,
+          token: token,
+          major: major,
+        })
+        .then(() => {
+          dispatch(loadingActions.setIsLoading(false));
+          dispatch(
+            toastActions.toast({
+              type: "success",
+              message: "Signup Successfully",
+              position: "top",
+            })
+          );
+          history.push("/home");
+        });
+    }
     dispatch(loadingActions.setIsLoading(false));
     dispatch(
       toastActions.toast({
@@ -66,11 +89,11 @@ const AddUsers = () => {
       .set({
         uid: email,
         userName: name,
-        role: usersRole,
+        role: usersRoleOptions,
         token: res.user.uid,
         major: major,
       })
-      .then(successCreateAccountInformation)
+      .then(successCreateAccountInformation(res.user.uid))
       .catch(errorCreateAccountInformation);
   };
 
@@ -102,25 +125,21 @@ const AddUsers = () => {
     setName(event.target.value);
   };
 
-  const onMajorChanged = (event) => {
+  const teacherMajorHandler = (event) => {
     setMajor(event.target.value);
   };
 
   const usersRoleHandler = (event) => {
-    setUsersRole(event.value);
+    setUsersRoleOptions(event.target.value);
   };
-
-  const options = [
-    { value: userRole.students, label: userRole.students },
-    { value: userRole.teacher, label: userRole.teacher },
-    { value: userRole.admin, label: userRole.admin },
-  ];
 
   return (
     <>
       <BackgroundLogo title="Add Users" />
       <section className={classes.tableSection}>
-        <p className={classes.instruction}>Add A New User With Role</p>
+        <Slide left>
+          <p className={classes.instruction}>Add A New User With Role</p>
+        </Slide>
         <form onSubmit={onSignupHandler}>
           <div className={classes.icons}>
             <MdPerson />
@@ -129,7 +148,7 @@ const AddUsers = () => {
             onChange={onNameChanged}
             type="text"
             id="userName"
-            placeholder="userName"
+            placeholder="User Name"
             value={name}
             required={true}
           />
@@ -139,7 +158,7 @@ const AddUsers = () => {
           <InputField
             onChange={onEmailChanged}
             type="email"
-            placeholder="userName@gmail.com"
+            placeholder="username@gmail.com"
             valdationRegex={emailRegex}
             value={email}
             errorEmailMessage={"It should be an e-mail"}
@@ -153,7 +172,7 @@ const AddUsers = () => {
             onChange={onPasswordChanged}
             type="password"
             id="pasword"
-            placeholder="password"
+            placeholder="Password"
             value={password}
             required={true}
             autoComplete="on"
@@ -165,7 +184,7 @@ const AddUsers = () => {
             onChange={onConfirmPasswordChanged}
             type="password"
             id="confirmPassword"
-            placeholder="confirmPassword"
+            placeholder="Confirm Password"
             value={confirmPassword}
             errorPasswordMessage={"It should be match password"}
             required={true}
@@ -173,23 +192,39 @@ const AddUsers = () => {
             isButtonClicked={isButtonClicked}
             autoComplete="on"
           />
-          <Select
+          <select
+            required
+            className={classes.selectOptions}
             onChange={usersRoleHandler}
-            className={classes.selectUsersRole}
-            options={options}
-            placeholder={userRole.students}
-          />
+            defaultValue={userRole.students}
+          >
+            <option value={userRole.students}> {userRole.students}</option>
+            <option value={userRole.teacher}> {userRole.teacher}</option>
+            <option value={userRole.admin}> {userRole.admin}</option>
+          </select>
 
-          {usersRole === "Teachers" && (
-            <InputField
-              label="Major"
-              onChange={onMajorChanged}
-              type="text"
-              id="major"
-              placeholder="major"
-              value={major}
-              required={true}
-            />
+          {usersRoleOptions === "Teachers" && (
+            <select
+              required
+              className={classes.selectOptions}
+              onChange={teacherMajorHandler}
+              defaultValue={teachersMajor.Math}
+            >
+              <option value={teachersMajor.Math}> {teachersMajor.Math}</option>
+              <option value={teachersMajor.English}>
+                {" "}
+                {teachersMajor.English}
+              </option>
+              <option value={teachersMajor.Art}> {teachersMajor.Art}</option>
+              <option value={teachersMajor.Piology}>
+                {" "}
+                {teachersMajor.Piology}
+              </option>
+              <option value={teachersMajor.Arabic}>
+                {" "}
+                {teachersMajor.Arabic}
+              </option>
+            </select>
           )}
           <div className={classes.actions}>
             <button className={classes.signupButton}>Sign Up</button>

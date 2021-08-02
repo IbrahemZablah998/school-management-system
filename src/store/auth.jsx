@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 const initialAuthState = {
   userInformation: Cookies.get('userInformation'),
   userRole: '',
+  teachersMajor: '',
 };
 
 const authSlice = createSlice({
@@ -20,6 +21,9 @@ const authSlice = createSlice({
     },
     setUserRole(state, action) {
       state.userRole = action.payload;
+    },
+    setTeachersMajor(state, action) {
+      state.teachersMajor = action.payload;
     }
   },
 });

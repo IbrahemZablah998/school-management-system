@@ -1,18 +1,17 @@
-@import "../../../styles/palettes.scss";
 @import "../../../styles/styles.scss";
 
 .sectionContainer {
   @include section;
-  @include section-padding($padding: 5px 80px 20px 40px);
+  @include section-padding($padding: 5px 80px);
 
   .instruction {
     @include instruction;
   }
 
   .selectStudentsClasses {
-    @include input;
+    @include input($padding-left: 0px, $padding: 0px);
   }
-  
+
   .actionsContainerAddingStudents {
     margin-top: 32px;
     align-items: center;
@@ -20,5 +19,26 @@
     .addingStudentsToClasses {
       @include button();
     }
+  }
+}
+
+//desktop
+@media screen and (min-width: 1025px) {
+  .sectionContainer {
+    @include section($width: 60%, $margin: 0 20%);
+  }
+}
+
+//tablet
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .sectionContainer {
+    @include section($width: 80%, $margin: 0 10%);
+  }
+}
+
+//phone
+@media screen and (max-width: 767px) {
+  .sectionContainer {
+    @include section($width: 96%, $margin: 0 2%);
   }
 }

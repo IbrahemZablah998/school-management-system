@@ -2,18 +2,18 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import PrivateRoute from "private-route-react";
-import MainNavbar from "./components/mainNavbar/mainNavbar";
 import HomePage from "./pages/home/homePage";
 import SignupPageForm from "./pages/signUp/signupPageForm";
 import SigninPageForm from "./pages/signIn/signinPageForm";
-import Loader from "./components/common/loader/loader";
-import NotifiactionBar from "./components/common/notificatioBar/notifiactionBar";
-import Users from "./components/administration/usersTable/usersTable";
-// import About from "./pages/about/about";
-import AddUsers from "./components/administration/addUsers/addUsers";
-import AddStudents from "./components/administration/addStudents/addStudents";
 import Teachers from "./pages/teachers/teachers";
 import Students from "./pages/students/students";
+// import About from "./pages/about/about";
+import Loader from "./components/common/loader/loader";
+import MainNavbar from "./components/mainNavbar/mainNavbar";
+import NotifiactionBar from "./components/common/notificatioBar/notifiactionBar";
+import Users from "./components/administration/usersTable/usersTable";
+import AddUsers from "./components/administration/addUsers/addUsers";
+import AddStudents from "./components/administration/addStudents/addStudents";
 import TeacherClasses from "./components/administration/teacherClasses/teacherClasses";
 import ManageSchedule from "./components/teacherSchedule/manageSchedule/manageSchedule";
 import ClassSchedule from "./components/teacherSchedule/classSchedule/classSchedule";
@@ -122,7 +122,13 @@ const App = () => {
             {!userInformation && <SignupPageForm />}
           </Route>
           <Route path="/home" exact>
-            <HomePage />
+            {userInformation.role === "Teachers" ? (
+              <Teachers />
+            ) : userInformation.role === "Students" ? (
+              <Students />
+            ) : (
+              <HomePage />
+            )}
           </Route>
           {/* <Route path="/about" >
             <About />

@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadingActions } from "../../../store/loading";
-import Firebase from "../../../database/config";
 import Table from "../../common/Tables/table";
 import Loader from "../../common/loader/loader";
 import BackgroundLogo from "../../common/backgroundLogo/backgroundLogo";
 import Footer from "../../common/footer/footer";
+import { loadingActions } from "../../../store/loading";
+import Firebase from "../../../database/config";
 import classes from "./classSchedule.module.scss";
 
 const ClassSchedule = () => {

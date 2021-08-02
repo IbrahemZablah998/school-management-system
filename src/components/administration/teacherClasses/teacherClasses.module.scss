@@ -1,7 +1,7 @@
 @import "../../../styles/styles.scss";
 
 .seactionConatainer {
-  @include section;
+  @include section($maxHeight: 50%);
   overflow: auto;
 
   .classesTime {
@@ -12,6 +12,7 @@
     .teachers {
       display: flex;
       align-items: center;
+      width:100%;
 
       .labelName {
         display: inline-block;
@@ -33,5 +34,26 @@
     flex-direction: column;
     text-align: center;
     border-radius: 10px;
+  }
+}
+
+//desktop
+@media screen and (min-width: 1025px) {
+  .seactionConatainer {
+    @include section($maxHeight: 50%, $width: 60%, $margin: 0 20%);
+  }
+}
+
+//tablet
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .seactionConatainer {
+    @include section($maxHeight: 50%, $width: 80%, $margin: 0 10%);
+  }
+}
+
+//phone
+@media screen and (max-width: 767px) {
+  .seactionConatainer {
+    @include section($maxHeight: 50%, $width: 96%, $margin: 0 2%);
   }
 }

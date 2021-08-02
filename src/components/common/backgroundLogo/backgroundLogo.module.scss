@@ -2,21 +2,43 @@
 @import "../../../styles//styles.scss";
 
 .banner {
-    background: map-get($white, lighter );
-    height: 250px;
+  background: map-get($white, lighter);
+  height: 250px;
+}
+
+.schoolLogo {
+  height: 140px;
+  top: 15%;
+  position: relative;
+}
+
+.sectionInformation {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 20px;
+  border-radius: 7px 7px 0 0;
+  @include modal-style;
+}
+
+//desktop
+@media screen and (min-width: 1025px) {
+  .sectionInformation {
+    @include modal-style($width: 60%, $margin: 0 20%);
   }
-  
-  .schoolLogo {
-    height: 140px;
-    top: 15%;
-    position: relative;
+}
+
+//tablet
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .sectionInformation {
+    @include modal-style($width: 80%, $margin: 0 10%);
   }
-  
-  .sitename {
-    text-align: left;
-    height: 60px;
-    line-height: 60px;
-    padding-left: 20px;
-    border-radius: 7px 7px 0 0;
-    @include modal-style;
+}
+
+//phone
+@media screen and (max-width: 767px) {
+  .sectionInformation {
+    @include modal-style($width: 96%, $margin: 0 2%);
   }
+}

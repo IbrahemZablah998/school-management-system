@@ -3,11 +3,11 @@ import { NavLink, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import classNames from "classnames";
 import { MdHome } from "react-icons/md";
+import TeachersSettings from "./teachersSettings/teachersSettings";
 import { authActions } from "../../store/auth";
 import AdminSetting from "./adminSetting/adminSetting";
 import Firebase from "../../database/config";
 import schoolLogo from "../../images/profileSchoolLogo.jpg";
-import TeachersSettings from "./teachersSettings/teachersSettings";
 import classes from "./mainNavbar.module.scss";
 
 const MainNavbar = () => {
@@ -25,6 +25,15 @@ const MainNavbar = () => {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           dispatch(authActions.setUserRole(doc.data()));
+        });
+      });
+
+    database
+      .collection("majorTypes")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          dispatch(authActions.setTeachersMajor(doc.data()));
         });
       });
   }, [dispatch, database]);
@@ -87,6 +96,11 @@ const MainNavbar = () => {
       <NavLink to="/home" className={classes[navLink]}>
         <MdHome className={classes.logo} />
       </NavLink>
+      <input type="checkbox" className={classes.menubtn} id="menubtn" />
+      <label htmlFor="menubtn" className={classes.menuicon}>
+        <span className={classes.menuiconline}></span>
+      </label>
+      
       <ul className={classes.navContainerList}>
         {userInformation ? (
           <>

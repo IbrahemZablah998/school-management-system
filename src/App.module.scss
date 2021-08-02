@@ -28,7 +28,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: map-get($blue, light);
 }
 
 @keyframes App-logo-spin {

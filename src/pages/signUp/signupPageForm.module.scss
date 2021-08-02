@@ -1,9 +1,8 @@
-@import "../../styles/palettes.scss";
 @import "../../styles/styles.scss";
 
 .singupPageSection {
   @include section;
-  padding: 5px 40px 20px 40px;
+  @include section-padding;
 
   .instruction {
     @include instruction;
@@ -23,5 +22,30 @@
 
   .loginForward {
     @include forward-link;
+  }
+}
+
+//desktop
+@media screen and (min-width: 1025px) {
+  
+  .singupPageSection {
+    @include section($width: 60%, $margin: 0 20%);
+
+  }
+}
+
+//tablet
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .singupPageSection {
+  
+    @include section($width: 80%, $margin: 0 10%);
+  }
+}
+
+//phone
+@media screen and (max-width: 767px) {
+  .singupPageSection {
+    @include section($width: 96%, $margin: 0 2%);
+    
   }
 }

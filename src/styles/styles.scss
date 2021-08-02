@@ -10,7 +10,8 @@
   align-items: center;
 }
 
-@mixin section($width: 40%, $margin: 0 30%) {
+@mixin section($width: 40%, $margin: 0 30%, $maxHeight: 80%) {
+  max-height: $maxHeight;
   @include modal-style(
     $background: map-get($white, lighter),
     $color: map-get($black, light),
@@ -36,8 +37,8 @@
   }
 }
 
-@mixin instruction {
-  font-size: 20px;
+@mixin instruction($fontSize: 20px) {
+  font-size: $fontSize;
   display: block;
   margin-block-start: 16px;
   margin-block-end: 16px;
@@ -67,14 +68,13 @@
 }
 
 @mixin select {
-  @include input($margin: 35px 5px, $padding: 10px 30px);
+  @include input($margin: 35px 5px 0 5px, $padding: 10px 30px);
 }
 
 @mixin loader-container {
   @include app-container;
   height: 100vh;
   background-color: map-get($black, base);
-  position: absolute;
   top: 0;
   display: flex;
   align-items: center;
@@ -125,12 +125,13 @@
   $key: darker,
   $padding: 10px 0,
   $margin: 10px 5px,
-  $width: 100%
+  $width: 100%,
+  $padding-left: 40px
 ) {
   background: map-get($color, $key);
   margin: $margin;
   padding: $padding;
-  padding-left: 40px;
+  padding-left: $padding-left;
   @include box($width: $width);
 }
 
@@ -175,21 +176,22 @@
   border-radius: 6px;
   cursor: pointer;
   border: 0;
+
   &:hover {
     color: map-get($color2, $key2);
   }
 }
 
-@mixin header($background: "") {
+@mixin header($background: "", $top: 40px) {
   position: fixed;
   display: flex;
   width: 100%;
-  top: 0;
+  top: $top;
   left: 0;
   justify-content: space-between;
   align-items: center;
   transition: 0.6s;
-  padding: 5px 100px;
+  padding: 5px 10px;
   background-color: $background;
   margin-top: 0px;
   z-index: 9999;

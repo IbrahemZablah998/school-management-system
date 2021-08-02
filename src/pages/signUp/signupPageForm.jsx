@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { MdPerson } from "react-icons/md";
 import { MdLock } from "react-icons/md";
+import Slide from "react-reveal/Slide";
 import { emailRegex } from "../../consts/RegEx";
 import { loadingActions } from "../../store/loading";
 import { toastActions } from "../../store/notification";
@@ -62,7 +63,7 @@ const SignupPageForm = () => {
       .set({
         uid: email,
         userName: name,
-        role: '',
+        role: "",
         token: res.user.uid,
       })
       .then(successCreateAccountInformation)
@@ -101,9 +102,11 @@ const SignupPageForm = () => {
     <>
       <BackgroundLogo title="WIX School " />
       <section className={classes.singupPageSection}>
-        <p className={classes.instruction}>
-          Create an account by registering your information
-        </p>
+        <Slide left>
+          <p className={classes.instruction}>
+            Create an account by registering your information
+          </p>
+        </Slide>
         <form onSubmit={onSignupHandler}>
           <div className={classes.icons}>
             <MdPerson />

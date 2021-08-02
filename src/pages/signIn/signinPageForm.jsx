@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { MdPerson } from "react-icons/md";
 import { MdLock } from "react-icons/md";
+import Slide from 'react-reveal/Slide';
 import { emailRegex } from "../../consts/RegEx";
 import { authActions } from "../../store/auth";
 import { loadingActions } from "../../store/loading";
@@ -87,7 +88,9 @@ const SigninForm = () => {
     <>
       <BackgroundLogo title="WIX School" />
       <section className={classes.singInPageSection}>
-        <p className={classes.instruction}>Log in using your email address</p>
+        <Slide left>
+          <p className={classes.instruction}>Log in using your email address</p>
+        </Slide>
         <form onSubmit={onSigninHandler}>
           <div className={classes.icons}>
             <MdPerson />
