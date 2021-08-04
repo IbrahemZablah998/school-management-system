@@ -68,13 +68,35 @@ const ManageSchedule = () => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          if (
-            timeFromLecture === doc.data().timeFrom &&
-            timeToLecture === doc.data().timeTo &&
-            classLecture === doc.data().class &&
-            daysLecture === doc.data().day
+          if (timeFromLecture >= timeToLecture) {
+            isConflict = "Please choose correct lecture time";
+          } else if (
+            (timeFromLecture >= doc.data().timeFrom &&
+              timeFromLecture <= doc.data().timeTo &&
+              daysLecture === doc.data().day) ||
+            (timeToLecture >= doc.data().timeFrom &&
+              timeToLecture <= doc.data().timeTo &&
+              daysLecture === doc.data().day)
           ) {
-            isConflict = "conflict";
+            if (userInformation.token === doc.data().token)
+              isConflict =
+                " You have a lecture on  " +
+                daysLecture +
+                " at " +
+                doc.data().timeFrom +
+                " - " +
+                doc.data().timeTo +
+                " in " +
+                doc.data().class;
+            else if (classLecture === doc.data().class) {
+              isConflict =
+                " Classroom has a reserved on " +
+                daysLecture +
+                " at " +
+                doc.data().timeFrom +
+                " - " +
+                doc.data().timeTo;
+            }
           }
         });
       })
@@ -84,8 +106,7 @@ const ManageSchedule = () => {
           dispatch(
             toastActions.toast({
               type: "failure",
-              message:
-                "There is a conflict with a reserve the room at that time, try another time",
+              message: isConflict,
               position: "top",
             })
           );
