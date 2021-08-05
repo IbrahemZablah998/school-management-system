@@ -120,9 +120,9 @@ const SigninForm = () => {
             <button className={classes.signinButton}>Login</button>
           </div>
         </form>
-        <a className={classes.forgetPassword} href="/resetPassword">
+        {/* <NavLink className={classes.forgetPassword} to="/resetPassword">
           Forgotten your password?
-        </a>
+        </NavLink> */}
       </section>
       <Footer />
     </>

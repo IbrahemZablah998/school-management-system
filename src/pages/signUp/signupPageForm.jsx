@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { MdPerson } from "react-icons/md";
 import { MdLock } from "react-icons/md";
@@ -163,9 +163,9 @@ const SignupPageForm = () => {
             <button className={classes.signupButton}>Sign Up</button>
           </div>
         </form>
-        <a className={classes.loginForward} href="/signin">
+        <NavLink className={classes.loginForward} to="/login">
           Have an account?
-        </a>
+        </NavLink>
       </section>
       <Footer />
     </>
