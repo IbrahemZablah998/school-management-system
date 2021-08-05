@@ -9,7 +9,7 @@ import Loader from "../../common/loader/loader";
 import classes from "../teacherClasses/teacherClasses.module.scss";
 
 const Classes = () => {
-  const [classesNum, setClasses] = useState([]);
+  const [classesNum, setClassesNum] = useState([]);
   const [classNumberHandler, setClassNumberHandler] = useState();
   const [viewSheet, setViewSheet] = useState(false);
   const [teacherClasses, setTeacherClasses] = useState([]);
@@ -42,7 +42,7 @@ const Classes = () => {
         if (doc.data().classNumber === classNumberHandler)
           postData.push({ ...doc.data() });
       });
-      setClasses(postData);
+      setClassesNum(postData);
       dispatch(loadingActions.setIsLoadingAdmin(false));
     });
   }, [dispatch, classNumberHandler]);
