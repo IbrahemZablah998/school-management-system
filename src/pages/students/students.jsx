@@ -14,41 +14,47 @@ const Students = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadingActions.setIsLoading(true));
-    const db = Firebase.firestore();
     async function fetchData() {
+      dispatch(loadingActions.setIsLoading(true));
+      const db = Firebase.firestore();
       const postData = [];
-      const getRequestTeachersInfo = await db.collection("teachersInfo");
-      const getRequestTeachers = await db.collection("teachers");
-
       await db
         .collection("classes")
         .doc(userInformation.token)
         .get()
-        .then((classes) => {
-          getRequestTeachers
+        .then(async (classes) => {
+          await db
+            .collection("teachers")
             .where("class", "==", classes.data().classNumber)
             .get()
-            .then((teachersClasses) => {
-              teachersClasses.forEach((teachersClass) => {
-                getRequestTeachersInfo.onSnapshot((teachersInfo) => {
-                  teachersInfo.forEach((teacherInfo) => {
-                    if (
-                      teacherInfo.data().token === teachersClass.data().token
-                    ) {
-                      postData.push(
-                        Object.assign(teacherInfo.data(), teachersClass.data())
+            .then(async (teachersClasses) => {
+              await Promise.all(
+                teachersClasses.docs.map(async (teachersClass) => {
+                  return await db
+                    .collection("teachersInfo")
+                    .where("token", "==", teachersClass.data().token)
+                    .get()
+                    .then(async (teachersInfo) => {
+                      await Promise.all(
+                        teachersInfo.docs.map((teacherInfo) => {
+                          return postData.push(
+                            Object.assign(
+                              teacherInfo.data(),
+                              teachersClass.data()
+                            )
+                          );
+                        })
                       );
-                    }
-                  });
-                });
-              });
+                    });
+                })
+              );
             });
         });
       setInformations(postData);
-      dispatch(loadingActions.setIsLoading(false));
     }
     fetchData();
+
+    dispatch(loadingActions.setIsLoading(false));
   }, [dispatch, userInformation.token]);
 
   const columns = React.useMemo(
