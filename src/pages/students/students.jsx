@@ -51,10 +51,10 @@ const Students = () => {
             });
         });
       setInformations(postData);
+      dispatch(loadingActions.setIsLoading(false));
     }
     fetchData();
 
-    dispatch(loadingActions.setIsLoading(false));
   }, [dispatch, userInformation.token]);
 
   const columns = React.useMemo(
