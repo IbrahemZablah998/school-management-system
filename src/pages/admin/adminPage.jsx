@@ -9,8 +9,8 @@ const AdminPage = () => {
   const usersObject = useSelector((state) => state.auth.userInformation);
   const userInformation = JSON.parse(usersObject ? usersObject : false);
   const adminName =
-    userInformation.userName.charAt(0).toUpperCase() +
-    userInformation.userName.slice(1);
+    userInformation.userName?.charAt(0).toUpperCase() +
+    userInformation.userName?.slice(1);
   const adminEmail = userInformation.uid;
 
   return (
