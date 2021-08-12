@@ -16,13 +16,6 @@ const Users = () => {
   const dispatch = useDispatch();
   const currentUserRole = useSelector((state) => state.auth.userInformation);
   const userInformation = JSON.parse(currentUserRole ? currentUserRole : false);
-  const [disable, setDisable] = useState(true);
-  const [usersRoleOriginal, setUsersRoleOriginal] = useState([]);
-  const [majorOriginal, setMajorOriginal] = useState([]);
-  const [changeValues, setChangeValues] = useState([]);
-  const [changeMajor, setChangeMajor] = useState([]);
-  const [roleValue, setRoleValue] = useState();
-  const [changeValue, setChangeValue] = useState();
 
   const usersExceptCurrent = users.filter((user) => {
     return user.id !== userInformation.token;
@@ -36,55 +29,51 @@ const Users = () => {
       snapshot.forEach((doc) => postData.push({ ...doc.data(), id: doc.id }));
       setUsers(postData);
       dispatch(loadingActions.setIsLoading(false));
-      dispatch(
-        toastActions.toast({
-          type: "",
-          message: "",
-          position: "",
-        })
-      );
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    if (usersRoleOriginal.length === 0 && majorOriginal.length === 0)
-      setDisable(true);
-    else setDisable(false);
-  }, [usersRoleOriginal.length, majorOriginal.length]);
-
-  const handleClickEditRole = useCallback(
+  const handleClickEditRow = useCallback(
     (rowIndex, change) => {
-      setRoleValue(change.value);
-      setUsersRoleOriginal(
-        usersRoleOriginal.filter((user) => {
-          return user.id !== rowIndex.row.original.id;
+      dispatch(loadingActions.setIsLoading(true));
+      const db = Firebase.firestore();
+      db.collection("users")
+        .doc(rowIndex.row.original.id)
+        .update({
+          role: change.value,
         })
-      );
-      if (rowIndex.row.original.role !== change.value) {
-        setUsersRoleOriginal((oldArray) => [
-          rowIndex.row.original,
-          ...oldArray,
-        ]);
-        setChangeValues((oldArray) => [change.value, ...oldArray]);
-      }
+        .then(() => {
+          dispatch(loadingActions.setIsLoading(false));
+          dispatch(
+            toastActions.toast({
+              type: "success",
+              message: "Successfully Modifying",
+              position: "top",
+            })
+          );
+        });
     },
-    [usersRoleOriginal]
+    [dispatch]
   );
 
   const handleClickEditMajor = useCallback(
     (rowIndex, change) => {
-      setChangeValue(change.value);
-      setMajorOriginal(
-        majorOriginal.filter((user) => {
-          return user.id !== rowIndex.row.original.id;
+      const db = Firebase.firestore();
+      db.collection("users")
+        .doc(rowIndex.row.original.id)
+        .update({
+          major: change.value,
         })
-      );
-      if (rowIndex.row.original.major !== change.value) {
-        setMajorOriginal((oldArray) => [rowIndex.row.original, ...oldArray]);
-        setChangeMajor((oldArray) => [change.value, ...oldArray]);
-      }
+        .then(() => {
+          dispatch(
+            toastActions.toast({
+              type: "success",
+              message: "Successfully Modifying Major",
+              position: "top",
+            })
+          );
+        });
     },
-    [majorOriginal]
+    [dispatch]
   );
 
   const columns = useMemo(
@@ -101,26 +90,21 @@ const Users = () => {
         Header: "Users Role",
         accessor: "RoleEditing",
         Cell: (cellObj) => (
-          <>
-         { setRoleValue(cellObj.row.original.role)}
           <Select
-            onChange={(change) => handleClickEditRole(cellObj, change)}
+            onChange={(change) => handleClickEditRow(cellObj, change)}
             options={[
               { value: userRole.students, label: userRole.students },
               { value: userRole.teacher, label: userRole.teacher },
               { value: userRole.admin, label: userRole.admin },
             ]}
-            placeholder={roleValue}
+            placeholder={cellObj.row.original.role}
           />
-          </>
         ),
       },
       {
         Header: "Users Major",
         accessor: "MajorEditing",
         Cell: (cellObj) => (
-          <>
-          {setChangeValue(cellObj.row.original.major)}
           <Select
             onChange={(change) => handleClickEditMajor(cellObj, change)}
             options={[
@@ -130,15 +114,14 @@ const Users = () => {
               { value: teachersMajor.Art, label: teachersMajor.Art },
               { value: teachersMajor.Piology, label: teachersMajor.Piology },
             ]}
-            placeholder={changeValue}
+            placeholder={cellObj.row.original.major}
             isDisabled={cellObj.row.original.role !== userRole.teacher}
           />
-          </>
         ),
       },
     ],
     [
-      handleClickEditRole,
+      handleClickEditRow,
       handleClickEditMajor,
       userRole.admin,
       userRole.students,
@@ -151,53 +134,11 @@ const Users = () => {
     ]
   );
 
-  const saveButtonHanler = async () => {
-    let index = 0,
-      majorIndex = 0;
-    dispatch(loadingActions.setIsLoading(true));
-    await usersRoleOriginal.map(async (userOriginal) => {
-      const db = Firebase.firestore();
-      await db.collection("users").doc(userOriginal.id).update({
-        role: changeValues[index],
-      });
-      return index++;
-    });
-
-    await majorOriginal.map(async (majorOriginal) => {
-      const db = Firebase.firestore();
-      await db.collection("users").doc(majorOriginal.id).update({
-        major: changeMajor[index],
-      });
-      return majorIndex++;
-    });
-    dispatch(loadingActions.setIsLoading(false));
-    dispatch(
-      toastActions.toast({
-        type: "success",
-        message: "Successfully Modifying",
-        position: "top",
-      })
-    );
-    setUsersRoleOriginal([]);
-    setMajorOriginal([]);
-    setChangeValues([]);
-    setChangeMajor([]);
-  };
-
   return (
     <>
       <BackgroundLogo title="Users Table" />
       <section className={classes.usersSection}>
         <div className={classes.headerContainer}>
-          <div className={classes.actions}>
-            <button
-              className={classes.saveButton}
-              disabled={disable}
-              onClick={saveButtonHanler}
-            >
-              Save
-            </button>
-          </div>
           <Table columns={columns} data={usersExceptCurrent} />
         </div>
       </section>
