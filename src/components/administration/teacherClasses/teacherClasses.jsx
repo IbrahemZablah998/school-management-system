@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loadingActions } from "../../../store/loading";
+import { toastActions } from "../../../store/notification";
 import Firebase from "../../../database/config";
 import Table from "../../common/Tables/table";
 import BackgroundLogo from "../../common/backgroundLogo/backgroundLogo";
 import Footer from "../../common/footer/footer";
-import Loader from "../../common/loader/loader";
 import classes from "./teacherClasses.module.scss";
 
 const TeacherClasses = () => {
@@ -14,10 +14,17 @@ const TeacherClasses = () => {
   const [viewSheet, setViewSheet] = useState(false);
   const [teacherClasses, setTeacherClasses] = useState([]);
   const dispatch = useDispatch();
-  const isLoadingAdmin = useSelector((state) => state.loader.isLoadingAdmin);
+
+  dispatch(
+    toastActions.toast({
+      type: "",
+      message: "",
+      position: "",
+    })
+  );
 
   useEffect(() => {
-    dispatch(loadingActions.setIsLoadingAdmin(true));
+    dispatch(loadingActions.setIsLoading(true));
     const db = Firebase.firestore();
     const teacherLectures = [];
     return db.collection("teachers").onSnapshot((snapshot) => {
@@ -32,12 +39,12 @@ const TeacherClasses = () => {
         }
       });
       setTeacherClasses(teacherLectures);
-      dispatch(loadingActions.setIsLoadingAdmin(false));
+      dispatch(loadingActions.setIsLoading(false));
     });
   }, [teacherNameHandler, teachers, dispatch]);
 
   useEffect(() => {
-    dispatch(loadingActions.setIsLoadingAdmin(true));
+    dispatch(loadingActions.setIsLoading(true));
     const db = Firebase.firestore();
     return db.collection("teachersInfo").onSnapshot((snapshot) => {
       const postData = [];
@@ -45,7 +52,7 @@ const TeacherClasses = () => {
         postData.push({ ...doc.data() });
       });
       setTeachers(postData);
-      dispatch(loadingActions.setIsLoadingAdmin(false));
+      dispatch(loadingActions.setIsLoading(false));
     });
   }, [dispatch]);
 
@@ -82,11 +89,6 @@ const TeacherClasses = () => {
 
   return (
     <>
-      {isLoadingAdmin && (
-        <div className={classes.loaderContainer}>
-          <Loader type="loader" />
-        </div>
-      )}
       {teacherNameHandler ? (
         <BackgroundLogo
           title={

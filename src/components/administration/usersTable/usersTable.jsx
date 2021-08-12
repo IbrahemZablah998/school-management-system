@@ -21,6 +21,8 @@ const Users = () => {
   const [majorOriginal, setMajorOriginal] = useState([]);
   const [changeValues, setChangeValues] = useState([]);
   const [changeMajor, setChangeMajor] = useState([]);
+  const [roleValue, setRoleValue] = useState();
+  const [changeValue, setChangeValue] = useState();
 
   const usersExceptCurrent = users.filter((user) => {
     return user.id !== userInformation.token;
@@ -52,6 +54,7 @@ const Users = () => {
 
   const handleClickEditRole = useCallback(
     (rowIndex, change) => {
+      setRoleValue(change.value);
       setUsersRoleOriginal(
         usersRoleOriginal.filter((user) => {
           return user.id !== rowIndex.row.original.id;
@@ -70,6 +73,7 @@ const Users = () => {
 
   const handleClickEditMajor = useCallback(
     (rowIndex, change) => {
+      setChangeValue(change.value);
       setMajorOriginal(
         majorOriginal.filter((user) => {
           return user.id !== rowIndex.row.original.id;
@@ -97,6 +101,8 @@ const Users = () => {
         Header: "Users Role",
         accessor: "RoleEditing",
         Cell: (cellObj) => (
+          <>
+         { setRoleValue(cellObj.row.original.role)}
           <Select
             onChange={(change) => handleClickEditRole(cellObj, change)}
             options={[
@@ -104,14 +110,17 @@ const Users = () => {
               { value: userRole.teacher, label: userRole.teacher },
               { value: userRole.admin, label: userRole.admin },
             ]}
-            placeholder={cellObj.row.original.role}
+            placeholder={roleValue}
           />
+          </>
         ),
       },
       {
         Header: "Users Major",
         accessor: "MajorEditing",
         Cell: (cellObj) => (
+          <>
+          {setChangeValue(cellObj.row.original.major)}
           <Select
             onChange={(change) => handleClickEditMajor(cellObj, change)}
             options={[
@@ -121,9 +130,10 @@ const Users = () => {
               { value: teachersMajor.Art, label: teachersMajor.Art },
               { value: teachersMajor.Piology, label: teachersMajor.Piology },
             ]}
-            placeholder={cellObj.row.original.major}
+            placeholder={changeValue}
             isDisabled={cellObj.row.original.role !== userRole.teacher}
           />
+          </>
         ),
       },
     ],

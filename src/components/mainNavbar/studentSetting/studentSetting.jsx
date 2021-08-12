@@ -10,9 +10,9 @@ const StudentSetting = ({ navLink, userName }) => {
         <NavLink className={classes[navLink]} to="/classesTime">
           Classes Time
         </NavLink>
-        <NavLink className={classes[navLink]} to="/about">
+        {/* <NavLink className={classes[navLink]} to="/about">
           About
-        </NavLink>
+        </NavLink> */}
       </div>
     </div>
   );

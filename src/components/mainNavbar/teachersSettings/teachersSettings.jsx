@@ -13,9 +13,9 @@ const TeachersSettings = ({ navLink, userName }) => {
         <NavLink className={classes[navLink]} to="/classSchedule">
           Class Schedule
         </NavLink>
-        <NavLink className={classes[navLink]} to="/about">
+        {/* <NavLink className={classes[navLink]} to="/about">
           About
-        </NavLink>
+        </NavLink> */}
         
       </div>
     </div>

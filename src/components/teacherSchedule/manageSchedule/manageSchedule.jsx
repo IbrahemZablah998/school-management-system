@@ -7,7 +7,6 @@ import Footer from "../../common/footer/footer";
 import Firebase from "../../../database/config";
 import { loadingActions } from "../../../store/loading";
 import { toastActions } from "../../../store/notification";
-import Loader from "../../common/loader/loader";
 import classes from "./manageSchedule.module.scss";
 
 const ManageSchedule = () => {
@@ -19,7 +18,6 @@ const ManageSchedule = () => {
   const [daysLecture, setDaysLecture] = useState("Sunday");
   const [classLecture, setClassLecture] = useState("1st");
   const dispatch = useDispatch();
-  const isLoadingAdmin = useSelector((state) => state.loader.isLoadingAdmin);
 
   const successAddingNewLecture = (res) => {
     dispatch(loadingActions.setIsLoading(false));
@@ -129,11 +127,6 @@ const ManageSchedule = () => {
 
   return (
     <>
-      {isLoadingAdmin && (
-        <div className={classes.loaderContainer}>
-          <Loader type="loader" />
-        </div>
-      )}
       <BackgroundLogo title={"Manage Schedule"} />
       <section className={classes.sectionContainer}>
         <Slide left>

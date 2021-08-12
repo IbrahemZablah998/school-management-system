@@ -73,7 +73,7 @@ const App = () => {
             path={"/admin"}
             component={AdminPage}
             isAbleToAccessRoute={isAbleToAccessRouteAdmin}
-            redirectPath={"/"}
+            redirectPath={"/admin"}
           />
           <PrivateRoute
             path={"/usersRole"}
@@ -133,7 +133,7 @@ const App = () => {
             path={"/classesTime"}
             component={StudentClasses}
             isAbleToAccessRoute={isAbleToAccessRouteStudent}
-            redirectPath={"/classesTime"}
+            redirectPath={"/"}
           />
           <Route path="/login">
             {userInformation && <Redirect to="/home" />}
@@ -148,13 +148,13 @@ const App = () => {
               <Teachers />
             ) : userInformation.role === "Students" ? (
               <Students />
-            ) : userInformation.role === "Guest" ? (
-              <GuestPage />
-            ) : userInformation.role === userRole.admin ? (
+              ) : userInformation.role === "Guest" ? (
+                <GuestPage />
+                ) : userInformation.role === "Administration" ? (
               <AdminPage />
-            ) : (
-              <HomePage />
-            )}
+              ) : (
+                <HomePage />
+                )}
           </Route>
           {/* <Route path="/about" >
             <About />

@@ -22,9 +22,9 @@ const AdminSetting = ({ navLink, userName }) => {
         <NavLink className={classes[navLink]} to="/teacherClasses">
           Teacher Classes
         </NavLink>
-        <NavLink className={classes[navLink]} to="/about">
+        {/* <NavLink className={classes[navLink]} to="/about">
           About
-        </NavLink>
+        </NavLink> */}
       </div>
     </div>
   );
